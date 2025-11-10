@@ -1,0 +1,5 @@
+session PlusExample = AutoCorres2_Main +
+  options [timeout = 6000]
+  sessions
+    "HOL-Number_Theory"
+  theories Plus_Ex
