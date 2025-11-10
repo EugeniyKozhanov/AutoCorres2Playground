@@ -1,0 +1,31 @@
+name: Build & Push Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'docker/Dockerfile'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build the Docker image
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/${OWNER}/ac2-play:latest
+          cd docker && docker build -t $IMAGE .
+
+      - name: Push image
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/${OWNER}/ac2-play:latest
+          docker push $IMAGE
+

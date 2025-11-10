@@ -1,0 +1,119 @@
+# Pull base image.
+FROM ubuntu:24.04
+
+ARG USERNAME=ubuntu
+ARG USER_UID=1000
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+RUN apt-get update \
+    && apt-get install -y \
+        sudo \
+        gnupg \
+        locales \
+        wget \
+        nano \
+        fonts-powerline \
+        lsb-release \
+        software-properties-common \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+
+RUN locale-gen en_US.UTF-8 
+ 
+RUN apt update \
+    && apt install -y \
+        build-essential \
+        cmake \
+        curl \
+        cutils \
+        git \
+        make \
+        pkg-config \
+        python3 \
+        python3-pip \
+        neovim \
+        bc \
+        cpio \
+        rsync \
+	strace \
+	ltrace \
+	gdb \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+RUN update-alternatives --set python /usr/bin/python3 
+
+RUN apt update \
+    && apt install -y \
+        python3-ijson \
+	libgtest-dev \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+
+RUN apt update \
+    && apt-get install -y \
+    python3 python3-pip python3-dev \
+    gcc-arm-none-eabi gcc-aarch64-linux-gnu gcc-10-riscv64-linux-gnu \
+    build-essential libxml2-utils ccache \
+    ncurses-dev librsvg2-bin device-tree-compiler cmake \
+    ninja-build curl zlib1g-dev texlive-fonts-recommended \
+    texlive-latex-extra texlive-metapost texlive-bibtex-extra \
+    mlton-compiler python3.12-venv tmux \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
+
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME
+RUN chmod 0440 /etc/sudoers.d/$USERNAME
+
+USER $USERNAME
+ENV HOME /home/$USERNAME
+WORKDIR /home/$USERNAME
+
+RUN python3 -m venv .pyenv
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > ./repo && chmod a+rx ./repo
+
+RUN mkdir isabell-repo && cd isabell-repo \
+	&& wget https://www.isa-afp.org/release/afp-2025-10-25.tar.gz \
+	&& tar -xvf afp-2025-10-25.tar.gz \
+	&& rm  -f afp-2025-10-25.tar.gz
+
+RUN mkdir -p playground && cd playground \
+	&& ../repo init -c --depth 1 -u https://github.com/EugeniyKozhanov/ver-manifests \
+	&& ../repo sync -cd -j7 
+
+RUN mkdir -p ~/.isabelle/etc
+RUN cat  > ~/.isabelle/etc/settings <<EOL
+init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/main"
+init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/bundled"
+
+ISABELLE_BUILD_JAVA_OPTIONS="-Xms2048m -Xmx6096m -Xss4m"
+JEDIT_JAVA_OPTIONS="-Xms128m -Xmx4096m -Xss4m"
+
+# Show bracket syntax for implications
+ISABELLE_JEDIT_OPTIONS="-m brackets"   
+
+EOL
+
+RUN playground/isabelle/bin/isabelle components -a
+RUN playground/isabelle/bin/isabelle components -u isabell-repo/afp-2025-10-25/thys
+RUN playground/isabelle/bin/isabelle build -bv AutoCorres2
+RUN playground/isabelle/bin/isabelle build -bv AutoCorres2_Main
+
+# RUN pip3 install --user --upgrade --break-system-packages pip
+# RUN pip3 install --user --break-system-packages sel4-deps
+# RUN stack upgrade --binary-only
+# #RUN stack install cabal-install
+# 
+# RUN cd seL4/l4v && mkdir -p ~/.isabelle/etc && cp -i misc/etc/settings ~/.isabelle/etc/settings \
+# 	&& ./isabelle/bin/isabelle components -a \
+# 	&& ./isabelle/bin/isabelle jedit -bf \
+# 	&& ./isabelle/bin/isabelle build -bv HOL
+# 
+# RUN cd seL4/l4v && mkdir -p ~/.isabelle/jedit/macros && cp misc/jedit/macros/goto-error.bsh ~/.isabelle/jedit/macros/.
+# 
+# RUN ~/.local/bin/stack install cabal-install
+
+CMD ["/bin/tmux"]
