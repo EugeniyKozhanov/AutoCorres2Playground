@@ -57,16 +57,15 @@ struct gic_dist_map {
 extern volatile struct gic_dist_map *const gic_dist;
 
 volatile struct gic_dist_map *const gic_dist =
-    (volatile struct gic_dist_map *)((0xfff00000ul + 0x1000));    
-
+    (volatile struct gic_dist_map *)((0xfff00000ul + 0x1000));
 
 static void cpu_iface_init(void)
 {   
     uint32_t i;
 
     /* For non-Exynos4, the registers are banked per CPU, need to clear them */
-    gic_dist->enable_clr[0] = 0xffffffff;
-    //gic_dist->pending_clr[0] = 0xffffffff;
+    gic_dist->enable_clr[0]  = 0xffffffff;
+    gic_dist->pending_clr[0] = 0xffffffff;
     
     /* put everything in group 0; group 1 if in hyp mode */
     /*
