@@ -1,4 +1,4 @@
-session PlusExample = AutoCorres2_Main +
+session Touch0 = AutoCorres2_Main +
   options [timeout = 6000]
   sessions
     "HOL-Number_Theory"

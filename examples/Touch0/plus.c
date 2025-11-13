@@ -7,8 +7,9 @@
 
 
 
-unsigned int plus(unsigned int a, unsigned int b) {
-    return a + b;
+unsigned int plus1(unsigned int a, unsigned int b) {
+    int n = a;
+    return n + b;
 }
 
 unsigned int plus2(unsigned int a, unsigned int b)
@@ -23,6 +24,6 @@ unsigned int plus2(unsigned int a, unsigned int b)
 
 int main(int argc, char **argv)
 {
-    return !(plus(1, 2) == plus2(1, 2));
+    return !(plus1(1, 2) == plus2(1, 2));
 }
 

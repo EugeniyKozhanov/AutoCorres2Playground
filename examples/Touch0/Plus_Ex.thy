@@ -17,17 +17,21 @@ find_theorems name:plus2
 
 autocorres [ts_force nondet = plus2] "plus.c"
 
-context ts_definition_plus begin
+context ts_definition_plus1 begin
 
-thm plus'_def
+
+find_theorems name:plus1
+find_theorems name:plus2
+
+thm plus1'_def
 (* 3 + 2 should be 5 *)
-lemma "plus' 3 2 = 5"
-  unfolding plus'_def
+lemma "plus1' 3 2 = 5"
+  unfolding plus1'_def
   by eval
 
 (* plus does what it says on the box *)
-lemma plus_correct: "plus' a b = a + b"
-  unfolding plus'_def
+lemma plus_correct: "plus1' a b = a + b"
+  unfolding plus1'_def
   apply (rule refl)
   done
 
@@ -52,8 +56,8 @@ lemma (in ts_definition_plus2) plus2_correct: "plus2' a b \<bullet> s \<lbrace> 
      by (auto simp: not_less measure_unat)
 
 (* plus2 does what it says on plus's box *)
-lemma (in plus_all_impl) plus2_is_plus: "plus2' a b \<bullet> s\<lbrace> \<lambda>r s. r = Result (plus' a b )\<rbrace>"
-  unfolding plus'_def
+lemma (in plus_all_impl) plus2_is_plus: "plus2' a b \<bullet> s\<lbrace> \<lambda>r s. r = Result (plus1' a b )\<rbrace>"
+  unfolding plus1'_def
   supply plus2_correct[runs_to_vcg]
   apply runs_to_vcg
   done
