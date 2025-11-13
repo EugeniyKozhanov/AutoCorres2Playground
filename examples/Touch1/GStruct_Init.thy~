@@ -1,0 +1,17 @@
+(*
+ * SPDX-License-Identifier: BSD-2-Clause
+ *)
+
+
+theory GStruct_Init
+imports
+  "AutoCorres2_Main.AutoCorres_Main"
+begin
+
+install_C_file "gstruct_init.c"
+
+
+autocorres [ts_force nondet] "gstruct_init.c"
+
+end
+

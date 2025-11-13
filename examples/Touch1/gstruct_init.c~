@@ -1,0 +1,1 @@
+extern volatile struct gic_dist_map *const gic_dist;
