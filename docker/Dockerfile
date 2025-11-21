@@ -85,7 +85,7 @@ RUN mkdir -p playground && cd playground \
 	&& ../repo sync -cd -j7 
 
 RUN mkdir -p ~/.isabelle/etc
-COPY isabell_settings ~/.isabelle/etc/settings << 'EOF'
+COPY isabell_settings ~/.isabelle/etc/settings
 
 RUN playground/isabelle/bin/isabelle components -a
 RUN playground/isabelle/bin/isabelle components -u isabell-repo/afp-2025-10-25/thys
