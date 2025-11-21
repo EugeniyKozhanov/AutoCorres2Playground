@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout
@@ -21,7 +21,7 @@ jobs:
         run: |
           OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           IMAGE=ghcr.io/${OWNER}/ac2-play:latest
-          cd docker && docker build -t $IMAGE .
+          cd docker && docker build --no-cache --network=host -t $IMAGE .
 
       - name: Push image
         run: |
