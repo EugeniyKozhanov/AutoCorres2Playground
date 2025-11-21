@@ -85,7 +85,7 @@ RUN mkdir -p playground && cd playground \
 	&& ../repo sync -cd -j7 
 
 RUN mkdir -p ~/.isabelle/etc
-RUN <<EOF > ~/.isabelle/etc/settings 
+RUN cat > ~/.isabelle/etc/settings << 'EOF'
 init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/main"
 init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/bundled"
 
