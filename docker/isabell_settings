@@ -3,6 +3,7 @@ init_components "$USER_HOME/.isabelle/contrib" "$ISABELLE_HOME/Admin/components/
 
 if [ -n "$BUILD_AGENT" ]
 then
+	ISABELLE_TOOL_JAVA_OPTIONS="-Djava.awt.headless=true -Xms512m -Xmx2g -Xss16m"
 	ISABELLE_BUILD_JAVA_OPTIONS="-Xms1024m -Xmx2048m -Xss4m"
 	JEDIT_JAVA_OPTIONS="-Xms128m -Xmx2048m -Xss4m"
 else
