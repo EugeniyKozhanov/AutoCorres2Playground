@@ -61,7 +61,7 @@ RUN apt update \
     ncurses-dev librsvg2-bin device-tree-compiler cmake \
     ninja-build curl zlib1g-dev texlive-fonts-recommended \
     texlive-latex-extra texlive-metapost texlive-bibtex-extra \
-    mlton-compiler python3.12-venv tmux \
+    mlton-compiler python3.12-venv haskell-stack tmux \
     && apt clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
 
@@ -102,18 +102,12 @@ RUN playground/isabelle/bin/isabelle components -u isabell-repo/afp-2025-10-25/t
 RUN playground/isabelle/bin/isabelle build -bv AutoCorres2
 RUN playground/isabelle/bin/isabelle build -bv AutoCorres2_Main
 
-# RUN pip3 install --user --upgrade --break-system-packages pip
-# RUN pip3 install --user --break-system-packages sel4-deps
-# RUN stack upgrade --binary-only
-# #RUN stack install cabal-install
-# 
-# RUN cd seL4/l4v && mkdir -p ~/.isabelle/etc && cp -i misc/etc/settings ~/.isabelle/etc/settings \
-# 	&& ./isabelle/bin/isabelle components -a \
-# 	&& ./isabelle/bin/isabelle jedit -bf \
-# 	&& ./isabelle/bin/isabelle build -bv HOL
-# 
-# RUN cd seL4/l4v && mkdir -p ~/.isabelle/jedit/macros && cp misc/jedit/macros/goto-error.bsh ~/.isabelle/jedit/macros/.
-# 
-# RUN ~/.local/bin/stack install cabal-install
+SHELL ["/bin/bash", "-c"]
 
-CMD ["/bin/tmux"]
+RUN source ~/.pyenv/bin/activate && pip3 install --upgrade pip
+RUN source ~/.pyenv/bin/activate && pip3 install sel4-deps
+
+RUN stack upgrade --binary-only
+RUN stack --resolver lts-22.33  install cabal-install
+
+CMD source ~/.pyenv/bin/activate  && /bin/tmux
