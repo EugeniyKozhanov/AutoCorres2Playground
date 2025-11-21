@@ -85,16 +85,7 @@ RUN mkdir -p playground && cd playground \
 	&& ../repo sync -cd -j7 
 
 RUN mkdir -p ~/.isabelle/etc
-RUN cat > ~/.isabelle/etc/settings << 'EOF'
-init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/main"
-init_components "\$USER_HOME/.isabelle/contrib" "\$ISABELLE_HOME/Admin/components/bundled"
-
-ISABELLE_BUILD_JAVA_OPTIONS="-Xms2048m -Xmx6096m -Xss4m"
-JEDIT_JAVA_OPTIONS="-Xms128m -Xmx4096m -Xss4m"
-
-ISABELLE_JEDIT_OPTIONS="-m brackets"   
-
-EOF
+COPY isabell_settings ~/.isabelle/etc/settings << 'EOF'
 
 RUN playground/isabelle/bin/isabelle components -a
 RUN playground/isabelle/bin/isabelle components -u isabell-repo/afp-2025-10-25/thys
