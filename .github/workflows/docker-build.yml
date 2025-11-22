@@ -21,7 +21,7 @@ jobs:
         run: |
           OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           IMAGE=ghcr.io/${OWNER}/ac2-play:latest
-          cd docker && docker build --no-cache --network=host -t $IMAGE .
+          cd docker && docker build --cpu-period=100000 --cpu-quota=50000 --memory="2g"  --no-cache --network=host -t $IMAGE .
 
       - name: Push image
         run: |
