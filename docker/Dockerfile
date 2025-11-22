@@ -87,10 +87,10 @@ RUN mkdir -p playground && cd playground \
 RUN mkdir -p ~/.isabelle/etc
 COPY isabell_settings $HOME/.isabelle/etc/settings
 
-RUN BUILD_AGENT=1 && playground/isabelle/bin/isabelle components -a
+RUN export BUILD_AGENT=1 && playground/isabelle/bin/isabelle components -a
 RUN playground/isabelle/bin/isabelle components -u isabell-repo/afp-2025-10-25/thys
-RUN BUILD_AGENT=1 && playground/isabelle/bin/isabelle build -bv AutoCorres2
-RUN BUILD_AGENT=1 && playground/isabelle/bin/isabelle build -bv AutoCorres2_Main
+RUN export BUILD_AGENT=1 && playground/isabelle/bin/isabelle build -bv AutoCorres2
+RUN export BUILD_AGENT=1 && playground/isabelle/bin/isabelle build -bv AutoCorres2_Main
 
 SHELL ["/bin/bash", "-c"]
 
