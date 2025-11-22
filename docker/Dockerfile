@@ -100,4 +100,5 @@ RUN source ~/.pyenv/bin/activate && pip3 install sel4-deps
 RUN stack upgrade --binary-only
 RUN stack --resolver lts-24.20  install cabal-install
 
+
 CMD source ~/.pyenv/bin/activate  && /bin/tmux
