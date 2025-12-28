@@ -1,0 +1,7 @@
+session "c_03" in "design" = "AutoCorres2_Main" +
+  options [timeout = 300, threads = 4]
+  sessions
+    "AutoCorres2_Main"
+  theories
+    "PCI_MMIO_H"
+    "PCI_MMIO_Proof"
