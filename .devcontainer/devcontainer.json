@@ -1,0 +1,37 @@
+{
+	"name": "Verification Environment",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"USERNAME": "ubuntu",
+			"USER_UID": "1000"
+		}
+	},
+	"remoteUser": "ubuntu",
+	"workspaceFolder": "/home/ubuntu",
+	"initializeCommand": "xhost si:localuser:$USER",
+	"mounts": [
+		"source=${localWorkspaceFolder}/chambers,target=/home/ubuntu/playground/chambers,type=bind,consistency=cached",
+		"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
+		"source=${localEnv:HOME}${localEnv:USERPROFILE}/.Xauthority,target=/home/ubuntu/.Xauthority,type=bind,consistency=cached"
+	],
+	"runArgs": [
+		"--net=host"
+	],
+	"containerEnv": {
+		"DISPLAY": "${localEnv:DISPLAY}",
+		"PATH": "/home/ubuntu/playground/tools/isabelle/bin:${localEnv:PATH}"
+		},
+	"postStartCommand": ". ~/.pyenv/bin/activate",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-vscode.cpptools"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	}
+}

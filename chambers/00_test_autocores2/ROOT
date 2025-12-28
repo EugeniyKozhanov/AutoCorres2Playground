@@ -1,0 +1,5 @@
+session c_00 = AutoCorres2_Main +
+  options [timeout = 6000]
+  sessions
+    "HOL-Number_Theory"
+  theories MultByAdd

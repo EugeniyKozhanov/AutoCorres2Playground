@@ -1,0 +1,7 @@
+session c_01 = AutoCorres2_Main +
+  options [timeout = 6000]
+  directories
+    "design"
+  theories
+    "design/Add_Or_Not_H"
+    "design/Add_Or_Not_Proof"

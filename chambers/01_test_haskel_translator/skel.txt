@@ -1,0 +1,2 @@
+/home/ubuntu/playground/chambers/01_test_haskel_translator/skel/Add_Or_Not_H.thy --> /home/ubuntu/playground/chambers/01_test_haskel_translator/design/Add_Or_Not_H.thy
+
